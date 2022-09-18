@@ -1,9 +1,11 @@
 from datetime import datetime
 
-from sqlalchemy import Column, SmallInteger, VARCHAR, ForeignKey,Boolean, TIMESTAMP, CHAR, DECIMAL
+from sqlalchemy import (Column, SmallInteger, VARCHAR, ForeignKey, Boolean,
+                        TIMESTAMP, CHAR, DECIMAL)
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
+
 
 class Category(Base):
     __tablename__: str = 'categories'
@@ -14,6 +16,7 @@ class Category(Base):
         SmallInteger,
         ForeignKey('categories.id', ondelete='CASCADE')
     )
+
 
 class Product(Base):
     __tablename__: str = 'products'
@@ -29,26 +32,35 @@ class Product(Base):
         nullable=False
     )
 
+
 class User(Base):
     __tablename__: str = 'users'
     id = Column(SmallInteger, primary_key=True)
     name = Column(VARCHAR(20), nullable=False)
     email = Column(VARCHAR(36), nullable=False, unique=True)
 
+
 class Order(Base):
     __tablename__: str = 'orders'
 
     id = Column(SmallInteger, primary_key=True)
-    user_id = Column(SmallInteger, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user_id = Column(
+        SmallInteger,
+        ForeignKey('users.id', ondelete='CASCADE'),
+        nullable=False
+    )
     is_paid = Column(Boolean, default=False, nullable=False)
     date_created = Column(TIMESTAMP, default=datetime.utcnow(), nullable=False)
+
 
 class OrderItem(Base):
     __tablename__: str = 'order_items'
 
     id = Column(SmallInteger, primary_key=True)
     product_article = Column(
-        CHAR, ForeignKey('products.article', ondelete='NO ACTION'), nullable=False)
+        CHAR, ForeignKey('products.article', ondelete='NO ACTION'),
+        nullable=False
+    )
     order_id = Column(
         SmallInteger,
         ForeignKey('orders.id', ondelete='CASCADE'),
